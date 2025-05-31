@@ -1,5 +1,15 @@
 {
+  "name": "wethefuture4",
+  "version": "1.0.0",
+  "description": "We the Future - Constitutional Learning Games",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
-    "mongodb": "^6.3.0"
+    "mongodb": "^6.3.0",
+    "fastify": "^4.24.3",
+    "@fastify/static": "^6.10.2",
+    "@fastify/cors": "^8.3.0"
   }
 } 
