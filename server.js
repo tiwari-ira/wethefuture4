@@ -6,6 +6,13 @@ const fastify = require("fastify")({
   logger: true,
 });
 
+// Enable CORS
+fastify.register(require("@fastify/cors"), {
+  origin: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+});
+
 // Setup our static files
 fastify.register(require("@fastify/static"), {
   root: path.join(__dirname, "public"),
@@ -28,14 +35,28 @@ fastify.post("/api/leaderboard", async (request, reply) => {
   return reply.send(result);
 });
 
+// Serve index.html for the root path
+fastify.get("/", async (request, reply) => {
+  return reply.sendFile("index.html");
+});
+
 // Run the server
 const start = async () => {
   try {
-    await fastify.listen({ port: process.env.PORT || 3000, host: "0.0.0.0" });
+    await fastify.listen({ 
+      port: process.env.PORT || 3000, 
+      host: "0.0.0.0" 
+    });
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);
   }
 };
 
-start(); 
+// Export the server for Vercel
+module.exports = fastify;
+
+// Only start the server if we're not in a serverless environment
+if (process.env.NODE_ENV !== 'production') {
+  start();
+} 
